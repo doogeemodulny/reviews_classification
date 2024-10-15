@@ -5,8 +5,9 @@ app = Flask(__name__)
 
 
 def handle_text(text):
-    rating = predict_rating(text)
-    return f"Automatically generated rating: {rating}"
+    rating, sentiment = predict_rating(text)
+    return f"Automatically generated rating: {rating}, Sentiment: {sentiment}"
+
 
 
 @app.route('/')

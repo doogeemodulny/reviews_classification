@@ -12,4 +12,7 @@ def predict_rating(review_text):
         logits = model(**inputs).logits
 
     predicted_class = torch.argmax(logits, dim=1).item()
-    return predicted_class
+
+    sentiment = "Positive" if predicted_class >= 5 else "Negative"
+
+    return predicted_class, sentiment
