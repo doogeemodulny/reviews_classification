@@ -7,7 +7,18 @@
     <script>
         function submitText() {
             const input = document.getElementById('textInput').value;
-            document.getElementById('response').innerText = `Вы ввели: ${input}`;
+            fetch('/execute', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: input })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('response').innerText = `${data.result}`;
+                document.getElementById('response').style.display = 'block'; // Убедитесь, что текст ответа видимый
+            });
         }
     </script>
     <style>
@@ -16,30 +27,43 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             height: 100vh;
             font-family: Arial, sans-serif;
+            padding-top: 20px; /* Отступ сверху для заголовка */
         }
         h1 {
             font-size: 2em;
             margin-bottom: 20px;
             color: #4f8c4f; /* Темно-зеленый текст */
+            width: 100%; /* Ширина заголовка */
+            text-align: center; /* Выравнивание по центру */
+        }
+        #container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Центрировать по вертикали */
+            align-items: center; /* Центрировать по горизонтали */
+            flex: 1; /* Занять оставшееся пространство */
         }
         #inputContainer {
             display: flex;
-            align-items: center;
+            flex-direction: column; /* Вертикальное размещение элементов */
+            width: 600px; /* Ширина контейнера для ввода */
         }
         #textInput {
-            margin-right: 10px;
+            height: 200px; /* Высота текстового поля */
             padding: 5px;
             border: 1px solid #4f8c4f; /* Темно-зеленая рамка */
             border-radius: 4px;
             outline: none;
+            resize: none; /* Запрет изменения размера */
+            overflow-y: auto; /* Вертикальная прокрутка при переполнении */
         }
         #textInput:focus {
             border-color: #2da52d; /* Более яркий зеленый при фокусе */
         }
         button {
+            margin-top: 10px; /* Отступ сверху для кнопки */
             padding: 5px 10px;
             color: white;
             background-color: #4f8c4f; /* Темно-зеленая кнопка */
@@ -50,18 +74,23 @@
         button:hover {
             background-color: #2da52d; /* Более яркий зеленый при наведении */
         }
-        p {
-            margin-top: 20px;
+        #response {
+            margin-top: 30px;
             color: #333; /* Темный текст для ответа */
+            white-space: pre-wrap; /* Поддержка формата вывода */
+            text-align: center; /* Центрирование текста ответа */
+            display: none; /* По умолчанию скрыт */
         }
     </style>
 </head>
 <body>
-    <h1>ПРОСТОЙ ИНТЕРФЕЙС</h1>
-    <div id="inputContainer">
-        <input type="text" id="textInput" placeholder="Введите текст">
-        <button onclick="submitText()">Отправить</button>
+    <h1>Тестовое задание для кандидатов в Case ML Lab</h1>
+    <div id="container">
+        <div id="inputContainer">
+            <textarea id="textInput" placeholder="Type the text of movie review in English"></textarea>
+            <button onclick="submitText()">Get rating</button>
+            <p id="response"></p>
+        </div>
     </div>
-    <p id="response"></p>
 </body>
 </html>
